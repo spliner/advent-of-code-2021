@@ -9,7 +9,6 @@ let (>=>) f1 f2 arg =
 type Argument = { Day: int; Part: int; Input: string }
 
 let parseArgs args =
-
     if Array.length args = 4 then
         let path = args.[3]
         let input = File.ReadAllText path
