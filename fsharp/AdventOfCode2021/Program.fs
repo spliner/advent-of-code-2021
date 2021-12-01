@@ -8,8 +8,7 @@ let (>=>) f1 f2 arg =
 
 type Argument = { Day: int; Part: int; Input: string }
 
-let parseArgs () =
-    let args = Environment.GetCommandLineArgs()
+let parseArgs args =
 
     if Array.length args = 4 then
         let path = args.[3]
@@ -33,8 +32,9 @@ let invokeRunner argument =
     | Ok runner -> runner argument.Input
     | Error e -> Error e
 
+let args = Environment.GetCommandLineArgs()
 let getResult = parseArgs >=> invokeRunner
 
-match getResult () with
+match getResult args with
 | Ok r -> printf $"Success: {r}"
 | Error e -> printf $"Error: {e}"
