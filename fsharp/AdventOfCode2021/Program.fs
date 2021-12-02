@@ -27,6 +27,8 @@ let invokeRunner argument =
         | 1, 2 -> Ok(Day1.partTwo)
         | 2, 1 -> Ok(Day2.partOne)
         | 2, 2 -> Ok(Day2.partTwo)
+        | 3, 1 -> Ok(Day3.partOne)
+        | 3, 2 -> Ok(Day3.partTwo)
         | day, part -> Error $"Could not find a runner for day {day} part {part}"
 
     match getRunner argument with
