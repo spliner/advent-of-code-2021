@@ -4,8 +4,7 @@ type Measurement = Measurement of int
 type SlidingWindow = Measurement * Measurement * Measurement
 
 let parseInput (input: string) =
-    input.Split('\n')
-    |> Seq.map (fun s -> s.Trim())
+    StringUtils.splitLines input
     |> Seq.map int
     |> Seq.map Measurement
 

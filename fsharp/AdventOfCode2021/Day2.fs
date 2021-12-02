@@ -22,8 +22,7 @@ let parseCommand (rawCommand: string) =
     | _ -> Error $"Invalid command: {rawCommand}"
 
 let parseInput (input: string) =
-    input.Trim().Split('\n')
-    |> Seq.map (fun s -> s.Trim())
+    StringUtils.splitLines input
     |> Seq.map parseCommand
     |> Seq.fold
         (fun list command ->
