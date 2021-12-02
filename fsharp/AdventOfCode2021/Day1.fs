@@ -31,7 +31,7 @@ let parseWindows (input: Measurement list) =
     |> Seq.toList
 
 let sum (window: SlidingWindow) =
-    let (Measurement x, Measurement y, Measurement z) = window
+    let Measurement x, Measurement y, Measurement z = window
     Measurement(x + y + z)
 
 let countWindowMeasurements (windows: SlidingWindow list) =
