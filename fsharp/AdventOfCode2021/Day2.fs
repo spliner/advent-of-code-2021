@@ -5,7 +5,7 @@ type Command =
     | Down of int
     | Up of int
 
-type State = { Position: int; Depth: int }
+type State = { Position: int; Depth: int; Aim: int }
 
 let parseCommand (rawCommand: string) =
     let split = rawCommand.Split(' ')
@@ -48,7 +48,7 @@ let nextState state command =
 let runCourse (commands: Command list) =
     let finalState =
         commands
-        |> Seq.fold nextState { Position = 0; Depth = 0 }
+        |> Seq.fold nextState { Position = 0; Depth = 0; Aim = 0 }
 
     finalState.Position * finalState.Depth
 
@@ -56,8 +56,6 @@ let partOne (input: string) : Result<string, string> =
     let commands = parseInput input
     let result = runCourse commands
     Ok $"{result}"
-
-type StateWithAim = { Position: int; Depth: int; Aim: int }
 
 let nextStateWithAim state command =
     match command with

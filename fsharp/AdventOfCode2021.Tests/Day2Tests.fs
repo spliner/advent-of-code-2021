@@ -75,34 +75,55 @@ forward 2"
 
 [<Fact>]
 let ``Next state with Forward command adds units to position`` () =
-    let state = { Day2.Position = 10; Day2.Depth = 10 }
+    let state =
+        { Day2.Position = 10
+          Day2.Depth = 10
+          Day2.Aim = 0 }
+
     let command = Day2.Forward 10
 
     let nextState = Day2.nextState state command
 
-    let expected = { Day2.Position = 20; Day2.Depth = 10 }
+    let expected =
+        { Day2.Position = 20
+          Day2.Depth = 10
+          Day2.Aim = 0 }
 
     Assert.Equal(expected, nextState)
 
 [<Fact>]
 let ``Next state with Up command subtracts units from depth`` () =
-    let state = { Day2.Position = 10; Day2.Depth = 10 }
+    let state =
+        { Day2.Position = 10
+          Day2.Depth = 10
+          Day2.Aim = 0 }
+
     let command = Day2.Up 10
 
     let nextState = Day2.nextState state command
 
-    let expected = { Day2.Position = 10; Day2.Depth = 0 }
+    let expected =
+        { Day2.Position = 10
+          Day2.Depth = 0
+          Day2.Aim = 0 }
 
     Assert.Equal(expected, nextState)
 
 [<Fact>]
 let ``Next state with Down command adds units to depth`` () =
-    let state = { Day2.Position = 10; Day2.Depth = 10 }
+    let state =
+        { Day2.Position = 10
+          Day2.Depth = 10
+          Day2.Aim = 0 }
+
     let command = Day2.Down 10
 
     let nextState = Day2.nextState state command
 
-    let expected = { Day2.Position = 10; Day2.Depth = 20 }
+    let expected =
+        { Day2.Position = 10
+          Day2.Depth = 20
+          Day2.Aim = 0 }
 
     Assert.Equal(expected, nextState)
 
