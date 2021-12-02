@@ -10,17 +10,16 @@ type State = { Position: int; Depth: int }
 let parseCommand (rawCommand: string) =
     let split = rawCommand.Split(' ')
 
-    if Array.length split <> 2 then
-        Error $"Invalid command: {rawCommand}"
-    else
-        let commandName = split.[0]
-        let unit = int split.[1]
+    match split with
+    | [| commandName; unit |] ->
+        let unit = int unit
 
         match commandName with
         | "forward" -> Ok(Forward(unit))
         | "down" -> Ok(Down(unit))
         | "up" -> Ok(Up(unit))
         | _ -> Error $"Invalid command name: {commandName}"
+    | _ -> Error $"Invalid command: {rawCommand}"
 
 let parseInput (input: string) =
     input.Trim().Split('\n')
