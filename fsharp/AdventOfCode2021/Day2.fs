@@ -54,8 +54,29 @@ let runCourse (commands: Command list) =
     finalState.Position * finalState.Depth
 
 let partOne (input: string) : Result<string, string> =
-    let commands = parseInput(input)
+    let commands = parseInput input
     let result = runCourse commands
     Ok $"{result}"
 
-let partTwo (input: string) : Result<string, string> = Ok $"Got {input}!"
+type StateWithAim = { Position: int; Depth: int; Aim: int }
+
+let nextStateWithAim state command =
+    match command with
+    | Down units -> { state with Aim = state.Aim + units }
+    | Up units -> { state with Aim = state.Aim - units }
+    | Forward units ->
+        { state with
+              Position = state.Position + units
+              Depth = state.Depth + state.Aim * units }
+
+let runCourseWithAim (commands: Command list) =
+    let finalState =
+        commands
+        |> Seq.fold nextStateWithAim { Position = 0; Depth = 0; Aim = 0 }
+
+    finalState.Position * finalState.Depth
+
+let partTwo (input: string) : Result<string, string> =
+    let commands = parseInput input
+    let result = runCourseWithAim commands
+    Ok $"{result}"

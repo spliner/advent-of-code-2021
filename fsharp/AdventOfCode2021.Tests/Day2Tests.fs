@@ -119,3 +119,17 @@ let ``Run course for example input should return 150`` () =
     let result = Day2.runCourse commands
 
     Assert.Equal(150, result)
+
+[<Fact>]
+let ``Run course with aim for example input should return 900`` () =
+    let commands =
+        [ Day2.Forward 5
+          Day2.Down 5
+          Day2.Forward 8
+          Day2.Up 3
+          Day2.Down 8
+          Day2.Forward 2 ]
+
+    let result = Day2.runCourseWithAim commands
+
+    Assert.Equal(900, result)
