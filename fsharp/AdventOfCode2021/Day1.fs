@@ -7,7 +7,7 @@ let parseInput (input: string) =
     input.Split('\n')
     |> Seq.map (fun s -> s.Trim())
     |> Seq.map int
-    |> Seq.map (fun m -> Measurement(m))
+    |> Seq.map Measurement
 
 let countMeasurements (measurements: Measurement list) =
     let rec countMeasurements' list previous =
