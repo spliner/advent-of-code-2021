@@ -137,7 +137,7 @@ let ``Run course for example input should return 150`` () =
           Day2.Down 8
           Day2.Forward 2 ]
 
-    let result = Day2.runCourse commands
+    let result = Day2.runCourse Day2.nextState commands
 
     Assert.Equal(150, result)
 
@@ -151,6 +151,6 @@ let ``Run course with aim for example input should return 900`` () =
           Day2.Down 8
           Day2.Forward 2 ]
 
-    let result = Day2.runCourseWithAim commands
+    let result = Day2.runCourse Day2.nextStateWithAim commands
 
     Assert.Equal(900, result)
