@@ -56,3 +56,13 @@ let ``Gamma rate of example input should be 22`` () =
 let ``Epsilon rate of example input should be 9`` () =
     let gammaRate = Day3.getEpsilonRate expectedParsedInput
     Assert.Equal(9, gammaRate)
+
+[<Fact>]
+let ``Oxygen generator rating of example input should be 23`` () =
+    let rating = Day3.getOxygenGeneratorRating expectedParsedInput
+    Assert.Equal(23, rating)
+
+[<Fact>]
+let ``CO2 scrubber rating of example input should be 10`` () =
+    let rating = Day3.getCO2ScrubberRating expectedParsedInput
+    Assert.Equal(10, rating)
