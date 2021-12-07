@@ -76,8 +76,60 @@ let ``Get score of example winner board should return 4512`` () =
           [ 2; 0; 12; 3; 7 ] ]
 
     let board = Day4.BingoBoard.create numbers
-    let drawNumbers = Set.ofList [ 7; 4; 9; 5; 11; 17; 23; 2; 0; 14; 21; 24 ]
 
-    let foo = Day4.BingoBoard.getScore board drawNumbers
+    let drawNumbers =
+        Set.ofList [ 7
+                     4
+                     9
+                     5
+                     11
+                     17
+                     23
+                     2
+                     0
+                     14
+                     21
+                     24 ]
 
-    Assert.Equal(4512, foo)
+    let score =
+        Day4.BingoBoard.getScore board drawNumbers
+
+    Assert.Equal(4512, score)
+
+[<Fact>]
+let ``Parse input should return numbers to draw and boards`` () =
+    let input =
+        "26,55,7,40,56,34,58,90
+
+62  5 77 94 75
+59 10 23 44 29
+93 91 63 51 74
+22 14 15  2 55
+78 18 95 58 57
+
+43 12 34 37 11
+84 69 52 38 68
+40 89 67 98 16
+47 59 96 63 95
+ 3 21 58 75 20"
+
+    let parsedInput = Day4.parseInput input
+    let numbersToDraw, boards = parsedInput
+
+    let expectedNumbersToDraw = [ 26; 55; 7; 40; 56; 34; 58; 90 ]
+
+    let expectedBoards =
+        [ [ [ 62; 5; 77; 94; 75 ]
+            [ 59; 10; 23; 44; 29 ]
+            [ 93; 91; 63; 51; 74 ]
+            [ 22; 14; 15; 2; 55 ]
+            [ 78; 18; 95; 58; 57 ] ]
+          [ [ 43; 12; 34; 37; 11 ]
+            [ 84; 69; 52; 38; 68 ]
+            [ 40; 89; 67; 98; 16 ]
+            [ 47; 59; 96; 63; 95 ]
+            [ 3; 21; 58; 75; 20 ] ] ]
+        |> List.map Day4.BingoBoard.create
+
+    Assert.Equal<int>(expectedNumbersToDraw, numbersToDraw)
+    Assert.Equal(expectedBoards, boards)
