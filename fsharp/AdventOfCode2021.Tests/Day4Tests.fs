@@ -12,9 +12,9 @@ let ``Bingo board with winning row should be won`` () =
           [ 1; 12; 20; 15; 19 ] ]
 
     let board = Day4.BingoBoard.create numbers
-    let drawnNumbers = Set.ofList [ 22; 13; 17; 11; 0 ]
+    let drawnNumbers = [ 22; 13; 17; 11; 0 ]
 
-    let isWon = Day4.BingoBoard.isWon board drawnNumbers
+    let isWon = Day4.BingoBoard.isWon drawnNumbers board
 
     Assert.Equal(true, isWon)
 
@@ -28,9 +28,9 @@ let ``Bingo board without winning row should not be won`` () =
           [ 1; 12; 20; 15; 19 ] ]
 
     let board = Day4.BingoBoard.create numbers
-    let drawnNumbers = Set.ofList [ 22; 13; 17; 11; 10 ]
+    let drawnNumbers = [ 22; 13; 17; 11; 10 ]
 
-    let isWon = Day4.BingoBoard.isWon board drawnNumbers
+    let isWon = Day4.BingoBoard.isWon drawnNumbers board
 
     Assert.Equal(false, isWon)
 
@@ -44,9 +44,9 @@ let ``Bingo board with winning column should be won`` () =
           [ 1; 12; 20; 15; 19 ] ]
 
     let board = Day4.BingoBoard.create numbers
-    let drawnNumbers = Set.ofList [ 10; 12; 9; 13; 2; 15 ]
+    let drawnNumbers = [ 10; 12; 9; 13; 2; 15 ]
 
-    let isWon = Day4.BingoBoard.isWon board drawnNumbers
+    let isWon = Day4.BingoBoard.isWon drawnNumbers board
 
     Assert.Equal(true, isWon)
 
@@ -60,9 +60,9 @@ let ``Bingo board without winning column should not be won`` () =
           [ 1; 12; 20; 15; 19 ] ]
 
     let board = Day4.BingoBoard.create numbers
-    let drawnNumbers = Set.ofList [ 10; 1; 9; 13; 2; 15 ]
+    let drawnNumbers = [ 10; 1; 9; 13; 2; 15 ]
 
-    let isWon = Day4.BingoBoard.isWon board drawnNumbers
+    let isWon = Day4.BingoBoard.isWon drawnNumbers board
 
     Assert.Equal(false, isWon)
 
@@ -78,18 +78,18 @@ let ``Get score of example winner board should return 4512`` () =
     let board = Day4.BingoBoard.create numbers
 
     let drawNumbers =
-        Set.ofList [ 7
-                     4
-                     9
-                     5
-                     11
-                     17
-                     23
-                     2
-                     0
-                     14
-                     21
-                     24 ]
+        [ 7
+          4
+          9
+          5
+          11
+          17
+          23
+          2
+          0
+          14
+          21
+          24 ]
 
     let score =
         Day4.BingoBoard.getScore board drawNumbers
@@ -132,4 +132,58 @@ let ``Parse input should return numbers to draw and boards`` () =
         |> List.map Day4.BingoBoard.create
 
     Assert.Equal<int>(expectedNumbersToDraw, numbersToDraw)
-    Assert.Equal(expectedBoards, boards)
+    Assert.Equal<Day4.BingoBoard.T>(expectedBoards, boards)
+
+[<Fact>]
+let ``Get winning score should return 4512 for example input`` () =
+    let numbersToDraw =
+        [ 7
+          4
+          9
+          5
+          11
+          17
+          23
+          2
+          0
+          14
+          21
+          24
+          10
+          16
+          13
+          6
+          15
+          25
+          12
+          22
+          18
+          20
+          8
+          19
+          3
+          26
+          1 ]
+
+    let boards =
+        [ [ [ 22; 13; 17; 11; 0 ]
+            [ 8; 2; 23; 4; 24 ]
+            [ 21; 9; 14; 16; 7 ]
+            [ 6; 10; 3; 18; 5 ]
+            [ 1; 12; 20; 15; 19 ] ]
+          [ [ 3; 15; 0; 2; 22 ]
+            [ 9; 18; 13; 17; 5 ]
+            [ 19; 8; 7; 25; 23 ]
+            [ 20; 11; 10; 24; 4 ]
+            [ 14; 21; 16; 12; 6 ] ]
+          [ [ 14; 21; 17; 24; 4 ]
+            [ 10; 16; 15; 9; 19 ]
+            [ 18; 8; 23; 26; 20 ]
+            [ 22; 11; 13; 6; 5 ]
+            [ 2; 0; 12; 3; 7 ] ] ]
+        |> List.map Day4.BingoBoard.create
+
+    let score =
+        Day4.getWinningScore numbersToDraw boards
+
+    Assert.Equal(4512, score)

@@ -22,10 +22,10 @@ module BingoBoard =
 
         result
 
-    let isWon (board: T) (drawnNumbers: int Set) =
+    let isWon (drawnNumbers: int list) (board: T) =
         let won numbers =
             numbers
-            |> Seq.forall (fun n -> Set.contains n drawnNumbers)
+            |> Seq.forall (fun n -> List.contains n drawnNumbers)
 
         let hasWinningRow =
             rows board
@@ -39,12 +39,12 @@ module BingoBoard =
 
         hasWinningRow || hasWinningColumn
 
-    let getScore (board: T) (drawnNumbers: int Set) =
+    let getScore (board: T) (drawnNumbers: int list) =
         let { Numbers = numbers } = board
 
         numbers
         |> Seq.collect id
-        |> Seq.filter (fun number -> not (drawnNumbers.Contains number))
+        |> Seq.filter (fun number -> not (List.contains number drawnNumbers))
         |> Seq.sum
         |> (fun sum -> sum * Seq.last drawnNumbers)
 
@@ -77,10 +77,34 @@ let parseInput (input: string) =
                     |> Seq.toList
 
                 BingoBoard.create numbers)
+        |> Seq.toList
 
     numbersToDraw, boards
 
+let getWinningScore (numbersToDraw: int list) (boards: BingoBoard.T list) =
+    let rec loop (drawn: int list) (currentIndex: int) =
+        let newNumber = numbersToDraw.[currentIndex]
+        let drawn = drawn @ [ newNumber ]
 
-let partOne (input: string) : Result<string, string> = Ok ""
+        let winner =
+            boards
+            |> Seq.filter (BingoBoard.isWon drawn)
+            |> Seq.tryHead
+
+        match winner with
+        | Some board -> BingoBoard.getScore board drawn
+        | None -> loop drawn (currentIndex + 1)
+
+    loop List.empty 0
+
+let partOne (input: string) : Result<string, string> =
+    let result =
+        input
+        |> parseInput
+        |> (fun parsedInput ->
+            let numbersToDraw, boards = parsedInput
+            getWinningScore numbersToDraw boards)
+
+    Ok(string result)
 
 let partTwo (input: string) : Result<string, string> = Ok ""
