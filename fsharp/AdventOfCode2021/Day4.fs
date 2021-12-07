@@ -107,4 +107,30 @@ let partOne (input: string) : Result<string, string> =
 
     Ok(string result)
 
-let partTwo (input: string) : Result<string, string> = Ok ""
+let getLastWinningScore (numbersToDraw: int list) (boards: BingoBoard.T list) =
+    let rec loop (drawn: int list) (currentIndex: int) (winners: BingoBoard.T list) (remaining: BingoBoard.T list) =
+        let newNumber = numbersToDraw.[currentIndex]
+        let drawn = drawn @ [ newNumber ]
+
+        let winners, remaining =
+            remaining
+            |> Seq.fold (fun state board ->
+                let isWinner = BingoBoard.isWon drawn board
+                let winners, remaining = state
+                if isWinner then (winners @ [ board ], remaining)
+                else (winners, remaining @ [ board ])) (winners, List.empty)
+        match remaining with
+        | [] -> BingoBoard.getScore (List.last winners) drawn
+        | _ -> loop drawn (currentIndex + 1) winners remaining
+
+    loop List.empty 0 List.empty boards
+
+let partTwo (input: string) : Result<string, string> =
+    let result =
+        input
+        |> parseInput
+        |> (fun parsedInput ->
+            let numbersToDraw, boards = parsedInput
+            getLastWinningScore numbersToDraw boards)
+
+    Ok(string result)
