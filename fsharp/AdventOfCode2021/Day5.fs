@@ -34,7 +34,33 @@ module Line =
                 let startX, endX = if x1 > x2 then x2, x1 else x1, x2
                 [ for x in startX .. endX -> (x, y1) ]
             else
-                List.empty
+                // https://en.wikipedia.org/wiki/Digital_differential_analyzer_(graphics_algorithm)
+                let dx = x2 - x1
+                let dy = y2 - y1
+
+                let step =
+                    if (abs dx) >= (abs dy) then
+                        abs dx
+                    else
+                        abs dy
+
+                let dx = dx / step
+                let dy = dy / step
+
+                // TODO: Look at all these mutable variables :(
+                let mutable x = x1
+                let mutable y = y1
+                let mutable i = 1
+                let mutable points = [ startPoint ]
+
+                while i <= step do
+                    x <- x + dx
+                    y <- y + dy
+                    i <- i + 1
+
+                    points <- List.append points [ Point(x, y) ]
+
+                points
 
         { Start = startPoint
           End = endPoint
@@ -65,11 +91,13 @@ let parseInput (input: string) =
             Line.create startPoint endPoint)
     |> Seq.toList
 
-let countOverlaps (lines: Line.T list) =
-    lines
+let private countOverlaps (lines: Line.T list) (filter: Line.T -> bool) =
+    let filteredLines = lines |> Seq.filter filter
+
+    filteredLines
     |> Seq.mapi
         (fun index line ->
-            lines
+            filteredLines
             |> Seq.skip (index + 1)
             |> Seq.fold
                 (fun acc otherLine ->
@@ -79,8 +107,16 @@ let countOverlaps (lines: Line.T list) =
     |> Seq.fold (fun acc points -> acc + points) Set.empty
     |> Seq.length
 
+let countHorizontalAndVerticalOverlaps (lines: Line.T list) =
+    countOverlaps lines (fun line -> Line.isHorizontal line || Line.isVertical line)
+
+let countAllOverlaps (lines: Line.T list) =
+    countOverlaps lines (fun _ -> true)
+
 let partOne (input: string) : Result<string, string> =
-    let result = parseInput input |> countOverlaps
+    let result = parseInput input |> countHorizontalAndVerticalOverlaps
     Ok(string result)
 
-let partTwo (input: string) : Result<string, string> = Ok ""
+let partTwo (input: string) : Result<string, string> =
+    let result = parseInput input |> countAllOverlaps
+    Ok(string result)

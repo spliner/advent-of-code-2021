@@ -26,7 +26,17 @@ type AllPoints() =
              Day5.Point(1, 3)
              Set.ofList [ Day5.Point(1, 1)
                           Day5.Point(1, 2)
-                          Day5.Point(1, 3) ] |] ]
+                          Day5.Point(1, 3) ] |]
+          [| Day5.Point(1, 1)
+             Day5.Point(3, 3)
+             Set.ofList [ Day5.Point(1, 1)
+                          Day5.Point(2, 2)
+                          Day5.Point(3, 3) ] |]
+          [| Day5.Point(9, 7)
+             Day5.Point(7, 9)
+             Set.ofList [ Day5.Point(9, 7)
+                          Day5.Point(8, 8)
+                          Day5.Point(7, 9) ] |] ]
 
     [<Theory>]
     [<MemberData(nameof AllPoints.TestData)>]
@@ -90,7 +100,7 @@ let ``Get intersection should return expected value`` () =
     Assert.Equal<Day5.Point>(expectedIntersection, intersection)
 
 [<Fact>]
-let ``Count overlaps of example input should return 5`` () =
+let ``Count horizontal and vertical overlaps of example input should return 5`` () =
     let lines =
         [ Day5.Point(0, 9), Day5.Point(5, 9)
           Day5.Point(8, 0), Day5.Point(0, 8)
@@ -104,6 +114,26 @@ let ``Count overlaps of example input should return 5`` () =
           Day5.Point(5, 5), Day5.Point(8, 2) ]
         |> List.map (fun (startPoint, endPoint) -> Day5.Line.create startPoint endPoint)
 
-    let overlaps = Day5.countOverlaps lines
+    let overlaps =
+        Day5.countHorizontalAndVerticalOverlaps lines
 
     Assert.Equal(5, overlaps)
+
+[<Fact>]
+let ``Count all overlaps with diagonals of example input should return 12`` () =
+    let lines =
+        [ Day5.Point(0, 9), Day5.Point(5, 9)
+          Day5.Point(8, 0), Day5.Point(0, 8)
+          Day5.Point(9, 4), Day5.Point(3, 4)
+          Day5.Point(2, 2), Day5.Point(2, 1)
+          Day5.Point(7, 0), Day5.Point(7, 4)
+          Day5.Point(6, 4), Day5.Point(2, 0)
+          Day5.Point(0, 9), Day5.Point(2, 9)
+          Day5.Point(3, 4), Day5.Point(1, 4)
+          Day5.Point(0, 0), Day5.Point(8, 8)
+          Day5.Point(5, 5), Day5.Point(8, 2) ]
+        |> List.map (fun (startPoint, endPoint) -> Day5.Line.create startPoint endPoint)
+
+    let overlaps = Day5.countAllOverlaps lines
+
+    Assert.Equal(12, overlaps)
